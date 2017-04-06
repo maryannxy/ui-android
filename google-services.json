@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "715078741008",
+    "firebase_url": "https://app-xyfindit-android.firebaseio.com",
+    "project_id": "app-xyfindit-android",
+    "storage_bucket": "app-xyfindit-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715078741008:android:33b98536043b5cfb",
+        "android_client_info": {
+          "package_name": "com.xyfindables.ui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "715078741008-hhfnakehlm64auolaq4c5qks10s00qo3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xyfindables.ui",
+            "certificate_hash": "746ac94c75294f625081841d22b26fefb813ec45"
+          }
+        },
+        {
+          "client_id": "715078741008-q5sk3bbjnag8dj2ghqq482r8fqkl589a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDU-ARbLl3bJPUyrJuHTjkSuxMXaWauA8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "715078741008-q5sk3bbjnag8dj2ghqq482r8fqkl589a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
