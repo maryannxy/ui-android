@@ -5,15 +5,15 @@
     </declare-styleable>
 
     <declare-styleable name="XYSignalBars">
-        <attr name="maxBars" format="integer"></attr>
+        <attr name="maxBars" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="XYEditView">
-        <attr name="readOnly" format="boolean"></attr>
+        <attr name="readOnly" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="XYSpinner">
-        <attr name="values" format="reference"></attr>
+        <attr name="values" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="XYPolygon">

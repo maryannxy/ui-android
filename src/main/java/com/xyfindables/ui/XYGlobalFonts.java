@@ -23,7 +23,7 @@ public class XYGlobalFonts extends XYBase {
         synchronized (XYGlobalFonts.class) {
             if (_awesome == null) {
                 _awesome = new Typeface[4];
-                _awesome[Typeface.NORMAL] = Typeface.createFromAsset(context.getAssets(), "fonts/FontAwesome.otf");
+                _awesome[Typeface.NORMAL] = Typeface.createFromAsset(context.getApplicationContext().getAssets(), "fonts/FontAwesome.otf");
                 for (int i = 1; i < 4; i++) {
                     _awesome[i] = Typeface.create(_awesome[Typeface.NORMAL], i);
                 }
@@ -40,7 +40,7 @@ public class XYGlobalFonts extends XYBase {
         synchronized (XYGlobalFonts.class) {
             if (_font == null) {
                 _font = new Typeface[4];
-                _font[Typeface.NORMAL] = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand.otf");
+                _font[Typeface.NORMAL] = Typeface.createFromAsset(context.getApplicationContext().getAssets(), "fonts/Quicksand.otf");
                 for (int i = 1; i < 4; i++) {
                     _font[i] = Typeface.create(_font[Typeface.NORMAL], i);
                 }

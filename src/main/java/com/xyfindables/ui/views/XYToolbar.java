@@ -31,13 +31,13 @@ public class XYToolbar extends android.support.v7.widget.Toolbar {
 
     public void enableMenuNavigation(OnClickListener onClickListener) {
         _backNavigationEnabled = false;
-        setNavigationIcon(getResources().getDrawable(R.drawable.ic_menu_white));
+        setNavigationIcon(getResources().getDrawable(R.drawable.xy_ui_toolbar_menu));
         setNavigationOnClickListener(onClickListener);
     }
 
     public void enableBackNavigation(final Activity activity) {
         _backNavigationEnabled = true;
-        setNavigationIcon(getResources().getDrawable(R.drawable.ic_back_white));
+        setNavigationIcon(getResources().getDrawable(R.drawable.xy_ui_toolbar_back));
         setNavigationOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +48,7 @@ public class XYToolbar extends android.support.v7.widget.Toolbar {
 
     public void enableBackNavigation(OnClickListener onClickListener) {
         _backNavigationEnabled = true;
-        setNavigationIcon(getResources().getDrawable(R.drawable.ic_back_white));
+        setNavigationIcon(getResources().getDrawable(R.drawable.xy_ui_toolbar_back));
         setNavigationOnClickListener(onClickListener);
     }
 
