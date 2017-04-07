@@ -7,6 +7,12 @@ import android.widget.TextView;
 
 import com.xyfindables.core.XYBase;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+
 /**
  * Created by arietrouw on 1/15/17.
  */
@@ -23,9 +29,38 @@ public class XYGlobalFonts extends XYBase {
         synchronized (XYGlobalFonts.class) {
             if (_awesome == null) {
                 _awesome = new Typeface[4];
-                _awesome[Typeface.NORMAL] = Typeface.createFromAsset(context.getAssets(), "fonts/FontAwesome.otf");
-                for (int i = 1; i < 4; i++) {
-                    _awesome[i] = Typeface.create(_awesome[Typeface.NORMAL], i);
+                int r = context.getResources().getIdentifier("fontawesome",
+                        "raw", context.getPackageName());
+                if (r != 0) {
+                    InputStream ins = context.getResources().openRawResource(r);
+
+                    File fontFile = null;
+
+                    if (ins != null) {
+                        try {
+                            File outputDir = context.getCacheDir();
+                            fontFile = File.createTempFile("font", "otf", outputDir);
+                            int len = ins.available();
+                            if (fontFile != null) {
+                                byte[] fontBytes = new byte[len];
+                                if (ins.read(fontBytes, 0, len) == len) {
+                                    FileOutputStream fos = new FileOutputStream(fontFile);
+                                    if (fos != null) {
+                                        fos.write(fontBytes);
+                                    }
+                                }
+
+                            }
+                        } catch (IOException ex) {
+                            logException(ex);
+                        }
+                    }
+                    if (fontFile != null) {
+                        _awesome[Typeface.NORMAL] = Typeface.createFromFile(fontFile);
+                        for (int i = 1; i < 4; i++) {
+                            _awesome[i] = Typeface.create(_awesome[Typeface.NORMAL], i);
+                        }
+                    }
                 }
             }
         }
@@ -40,9 +75,38 @@ public class XYGlobalFonts extends XYBase {
         synchronized (XYGlobalFonts.class) {
             if (_font == null) {
                 _font = new Typeface[4];
-                _font[Typeface.NORMAL] = Typeface.createFromAsset(context.getAssets(), "fonts/Quicksand.otf");
-                for (int i = 1; i < 4; i++) {
-                    _font[i] = Typeface.create(_font[Typeface.NORMAL], i);
+                int r = context.getResources().getIdentifier("quicksand",
+                        "raw", context.getPackageName());
+                if (r != 0) {
+                    InputStream ins = context.getResources().openRawResource(r);
+
+                    File fontFile = null;
+
+                    if (ins != null) {
+                        try {
+                            File outputDir = context.getCacheDir();
+                            fontFile = File.createTempFile("font", "otf", outputDir);
+                            int len = ins.available();
+                            if (fontFile != null) {
+                                byte[] fontBytes = new byte[len];
+                                if (ins.read(fontBytes, 0, len) == len) {
+                                    FileOutputStream fos = new FileOutputStream(fontFile);
+                                    if (fos != null) {
+                                        fos.write(fontBytes);
+                                    }
+                                }
+
+                            }
+                        } catch (IOException ex) {
+                            logException(ex);
+                        }
+                    }
+                    if (fontFile != null) {
+                        _font[Typeface.NORMAL] = Typeface.createFromFile(fontFile);
+                        for (int i = 1; i < 4; i++) {
+                            _font[i] = Typeface.create(_font[Typeface.NORMAL], i);
+                        }
+                    }
                 }
             }
         }
