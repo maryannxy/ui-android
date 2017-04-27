@@ -8,6 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ui-android-library" />
+            <option value="$PROJECT_DIR$/ui-android-sample" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
