@@ -23,6 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            minifyEnabled false
         }
     }
 }
@@ -34,5 +35,5 @@ dependencies {
         transitive = true;
     }
     compile 'com.facebook.android:facebook-android-sdk:4.20.0'
-    compile 'com.github.xycorp:core-android:1.0.4'
+    compile 'com.github.xycorp:core-android:1.0.6'
 }
