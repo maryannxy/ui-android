@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.xyfindables.core.XYBase;
 import com.xyfindables.ui.views.XYToolbar;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -61,6 +64,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "Created: " + this.getLocalClassName());
+        Fabric.with(this, new Crashlytics());
         super.onCreate(savedInstanceState);
     }
 
