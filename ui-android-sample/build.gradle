@@ -23,9 +23,24 @@ android {
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.google.firebase:firebase-plugins:1.0.5'
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':ui-android-library')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile project(':ui-android-library')
+    compile 'com.google.firebase:firebase-crash:10.0.1'
 }
+
+
+apply plugin: 'com.google.gms.google-services'
