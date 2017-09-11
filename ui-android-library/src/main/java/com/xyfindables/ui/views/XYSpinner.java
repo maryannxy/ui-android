@@ -53,7 +53,8 @@ public class XYSpinner extends AppCompatSpinner {
                     _values = context.getResources().getStringArray(idValues);
                 }
 
-                _hint = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "hint");
+                int hintId = attrs.getAttributeResourceValue("http://schemas.android.com/apk/res/android", "hint", 0);
+                _hint = getResources().getString(hintId);
                 attributyeArray.recycle();
             }
         }
