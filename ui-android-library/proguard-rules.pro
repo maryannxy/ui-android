@@ -30,4 +30,4 @@
 -keepattributes *Annotation*
 -keepattributes EnclosingMethod
 
--keep public class com.xyfindables.** { *; }
+-keep class com.xyfindables.** { *; }
