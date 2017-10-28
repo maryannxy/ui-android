@@ -166,4 +166,11 @@ public class XYSpinner extends AppCompatSpinner {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
     }
 
+    public void setEntries(String[] entries) {
+        _entries = entries;
+    }
+
+    public void setValues(String[] values) {
+        _values = values;
+    }
 }
