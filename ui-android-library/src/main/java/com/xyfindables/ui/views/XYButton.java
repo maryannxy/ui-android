@@ -41,12 +41,17 @@ public class XYButton extends AppCompatButton {
                 }
             }
         });
-
     }
 
     @Override
     public void setOnClickListener(OnClickListener listener) {
         _onClickListener = listener;
+    }
+
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        return true;
     }
 
     public void hideKeyBoard() {
@@ -58,7 +63,9 @@ public class XYButton extends AppCompatButton {
                     View view = activity.getCurrentFocus();
                     if (view != null) {
                         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
                     }
                 }
             }
