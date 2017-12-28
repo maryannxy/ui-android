@@ -3,10 +3,8 @@ package com.xyfindables.ui;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -20,6 +18,8 @@ import io.fabric.sdk.android.Fabric;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import static com.xyfindables.core.XYBase.logInfo;
 
 public abstract class XYBaseActivity extends AppCompatActivity {
 
@@ -65,7 +65,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "Created: " + this.getLocalClassName());
+        logInfo(TAG, "Created: " + this.getLocalClassName());
         Fabric.with(this, new Crashlytics());
         super.onCreate(savedInstanceState);
     }
@@ -90,14 +90,14 @@ public abstract class XYBaseActivity extends AppCompatActivity {
 
     @Override
     public void onStart() {
-        Log.i(TAG, "Started: " + this.getLocalClassName());
+        logInfo(TAG, "Started: " + this.getLocalClassName());
         super.onStart();
         XYBase.logAction(TAG, "onStart");
     }
 
     @Override
     public void onStop() {
-        Log.i(TAG, "Stopped: " + this.getLocalClassName());
+        logInfo(TAG, "Stopped: " + this.getLocalClassName());
         super.onStop();
         XYBase.logAction(TAG, "onStop");
         unregisterReceivers();
@@ -105,7 +105,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "Destroyed: " + this.getLocalClassName());
+        logInfo(TAG, "Destroyed: " + this.getLocalClassName());
         super.onDestroy();
     }
 
