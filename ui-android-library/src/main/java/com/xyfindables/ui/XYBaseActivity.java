@@ -1,24 +1,37 @@
 package com.xyfindables.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.xyfindables.core.XYBase;
-import com.xyfindables.ui.views.XYToolbar;
-
 import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+import com.crashlytics.android.answers.Answers;
+import com.xyfindables.ui.views.XYTextView;
+import com.xyfindables.ui.views.XYToolbar;
+import com.xyfindables.core.XYBase;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
+
+import static com.xyfindables.core.XYBase.logExtreme;
 import static com.xyfindables.core.XYBase.logInfo;
 
 public abstract class XYBaseActivity extends AppCompatActivity {
@@ -32,10 +45,11 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     }
 
     private XYToolbar _toolbar;
+    protected static int _activityCount = 0;
 
     public XYToolbar getToolbar() {
         if (_toolbar == null) {
-            _toolbar = (XYToolbar) findViewById(R.id.toolbar);
+            _toolbar = findViewById(R.id.toolbar);
         }
         return _toolbar;
     }
@@ -66,7 +80,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         logInfo(TAG, "Created: " + this.getLocalClassName());
-        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Answers(), new Crashlytics());
         super.onCreate(savedInstanceState);
     }
 
@@ -76,31 +90,24 @@ public abstract class XYBaseActivity extends AppCompatActivity {
         loadToolbar();
     }
 
-    private BroadcastReceiver _connectivityReceiver;
-
-    private void unregisterReceivers() {
-        unregisterReceiver(_connectivityReceiver);
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        XYBase.logAction(TAG, "onResume");
+        _activityCount++;
+        logInfo(TAG, "onResume:" + _activityCount + ":" + this.getLocalClassName());
     }
 
     @Override
     public void onStart() {
-        logInfo(TAG, "Started: " + this.getLocalClassName());
-        super.onStart();
         XYBase.logAction(TAG, "onStart");
+        super.onStart();
     }
 
     @Override
     public void onStop() {
-        logInfo(TAG, "Stopped: " + this.getLocalClassName());
-        super.onStop();
         XYBase.logAction(TAG, "onStop");
-        unregisterReceivers();
+        super.onStop();
+        _activityCount--;
     }
 
     @Override
@@ -111,9 +118,150 @@ public abstract class XYBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        logInfo(TAG, "onPause:" + _activityCount + ":" + this.getLocalClassName());
         super.onPause();
+        hideThrobber();
         hideKeyboard();
-        XYBase.logAction(TAG, "onPause");
+    }
+
+    public static boolean isForeground() {
+        return (_activityCount > 0);
+    }
+
+    private ProgressDialog _progressBar = null;
+
+    protected void showProgressBar() {
+        logExtreme(TAG, "showProgressBar");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_progressBar != null && !isFinishing()) {
+                    _progressBar.show();
+                }
+            }
+        });
+    }
+
+    protected void showProgressBar(final String title, final String message, final boolean cancellable, final int max) {
+        logExtreme(TAG, "showProgressBar");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_progressBar == null) {
+                    _progressBar = new ProgressDialog(XYBaseActivity.this);
+                    _progressBar.setTitle(title);
+                    _progressBar.setMessage(message);
+                    _progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    _progressBar.setCancelable(cancellable);
+                    _progressBar.setMax(max);
+                    if (!isFinishing()) {
+                        _progressBar.show();
+                    }
+                }
+            }
+        });
+    }
+
+    protected void incrementProgressBar(final int increment) {
+        if (_progressBar != null) {
+            _progressBar.incrementProgressBy(increment);
+        }
+    }
+
+    protected ProgressDialog getProgressBar() {
+        return _progressBar;
+    }
+
+    protected void hideProgressBar() {
+        logExtreme(TAG, "hideProgressBar");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_progressBar != null && _progressBar.isShowing()) {
+                    _progressBar.dismiss();
+                    _progressBar = null;
+                }
+            }
+        });
+    }
+
+    protected void setProgressBarMessage(final String message) {
+        logExtreme(TAG, "setProgressBarMessage");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_progressBar != null) {
+                    _progressBar.setMessage(message);
+                }
+            }
+        });
+    }
+
+    private XYThrobberDialog _dialogThrobber = null;
+
+    protected void showThrobber() {
+        logExtreme(TAG, "showThrobber");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_dialogThrobber == null) {
+                    _dialogThrobber = new XYThrobberDialog(XYBaseActivity.this);
+                    if (!isFinishing()) {
+                        _dialogThrobber.show();
+                    }
+                } else {
+                    _dialogThrobber.dismiss();
+                    _dialogThrobber = null;
+                    _dialogThrobber = new XYThrobberDialog(XYBaseActivity.this);
+                    if (!isFinishing()) {
+                        _dialogThrobber.show();
+                    }
+                }
+            }
+        });
+    }
+
+    protected void hideThrobber() {
+        logExtreme(TAG, "hideThrobber");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_dialogThrobber != null) {
+                    _dialogThrobber.dismiss();
+                    _dialogThrobber = null;
+                }
+            }
+        });
+    }
+
+    private XYSplashDialog _dialogSplash = null;
+
+    protected void showSplash() {
+        logExtreme(TAG, "showSplash");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_dialogSplash == null) {
+                    _dialogSplash = new XYSplashDialog(XYBaseActivity.this);
+                    if (!isFinishing()) {
+                        _dialogSplash.show();
+                    }
+                }
+            }
+        });
+    }
+
+    protected void hideSplash() {
+        logExtreme(TAG, "hideSplash");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (_dialogSplash != null) {
+                    _dialogSplash.dismiss();
+                    _dialogSplash = null;
+                }
+            }
+        });
     }
 
     public void hideKeyboard() {
@@ -126,6 +274,5 @@ public abstract class XYBaseActivity extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
 }
 
