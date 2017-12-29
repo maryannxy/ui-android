@@ -33,6 +33,7 @@ import io.fabric.sdk.android.Fabric;
 
 import static com.xyfindables.core.XYBase.logExtreme;
 import static com.xyfindables.core.XYBase.logInfo;
+import static com.xyfindables.core.XYBase.logStatus;
 
 public abstract class XYBaseActivity extends AppCompatActivity {
 
@@ -79,7 +80,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        logInfo(TAG, "Created: " + this.getLocalClassName());
+        logStatus(TAG, "Activity Created: " + this.getLocalClassName());
         Fabric.with(this, new Answers(), new Crashlytics());
         super.onCreate(savedInstanceState);
     }
@@ -92,6 +93,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        XYBase.logStatus(TAG, "Activity Resumed: " + this.getLocalClassName());
         super.onResume();
         _activityCount++;
         logInfo(TAG, "onResume:" + _activityCount + ":" + this.getLocalClassName());
@@ -99,26 +101,26 @@ public abstract class XYBaseActivity extends AppCompatActivity {
 
     @Override
     public void onStart() {
-        XYBase.logAction(TAG, "onStart");
+        XYBase.logStatus(TAG, "Activity Started: " + this.getLocalClassName());
         super.onStart();
     }
 
     @Override
     public void onStop() {
-        XYBase.logAction(TAG, "onStop");
+        XYBase.logStatus(TAG, "Activity Stopped: " + this.getLocalClassName());
         super.onStop();
         _activityCount--;
     }
 
     @Override
     protected void onDestroy() {
-        logInfo(TAG, "Destroyed: " + this.getLocalClassName());
+        XYBase.logStatus(TAG, "Activity Destroyed: " + this.getLocalClassName());
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        logInfo(TAG, "onPause:" + _activityCount + ":" + this.getLocalClassName());
+        XYBase.logStatus(TAG, "Activity Paused: " + this.getLocalClassName());
         super.onPause();
         hideThrobber();
         hideKeyboard();
