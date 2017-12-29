@@ -1,4 +1,4 @@
-package com.xyfindables.ui;
+package com.xyfindables.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.xyfindables.ui.R;
 
 public class XYSplashDialog extends Dialog {
     public XYSplashDialog(Context context) {

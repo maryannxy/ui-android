@@ -1,43 +1,42 @@
 package com.xyfindables.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
-import com.xyfindables.ui.views.XYTextView;
+import com.xyfindables.ui.dialogs.XYSplashDialog;
+import com.xyfindables.ui.dialogs.XYThrobberDialog;
 import com.xyfindables.ui.views.XYToolbar;
 import com.xyfindables.core.XYBase;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import io.fabric.sdk.android.Fabric;
 
-import static com.xyfindables.core.XYBase.logExtreme;
-import static com.xyfindables.core.XYBase.logInfo;
-import static com.xyfindables.core.XYBase.logStatus;
+import static com.xyfindables.core.XYBase.*;
 
 public abstract class XYBaseActivity extends AppCompatActivity {
 
     final private static String TAG = XYBaseActivity.class.getSimpleName();
+
+    public static void RunOnUIThread(Runnable action) {
+        if( Looper.myLooper() == Looper.getMainLooper() ) {
+            action.run();
+        } else {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(action);
+        }
+    }
 
     protected static final ThreadPoolExecutor _threadPool;
 
@@ -45,50 +44,29 @@ public abstract class XYBaseActivity extends AppCompatActivity {
         _threadPool = new ThreadPoolExecutor(3, 30, 30, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
     }
 
-    private XYToolbar _toolbar;
-    protected static int _activityCount = 0;
-
-    public XYToolbar getToolbar() {
+    public XYToolbar _toolbar;
+    public XYToolbar toolbar() {
         if (_toolbar == null) {
             _toolbar = findViewById(R.id.toolbar);
         }
         return _toolbar;
     }
 
-    public void showToast(final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(XYBaseActivity.this, message, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+    public XYThrobberDialog throbber;
 
-    private void loadToolbar() {
-        XYToolbar toolbar = getToolbar();
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            final ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayShowHomeEnabled(true);
-                actionBar.setDisplayHomeAsUpEnabled(false);
-                actionBar.setDisplayShowCustomEnabled(true);
-                actionBar.setDisplayShowTitleEnabled(false);
-            }
-        }
-    }
+    protected static int _activityCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         logStatus(TAG, "Activity Created: " + this.getLocalClassName());
         Fabric.with(this, new Answers(), new Crashlytics());
+        throbber = new XYThrobberDialog(this);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        loadToolbar();
     }
 
     @Override
@@ -122,7 +100,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     protected void onPause() {
         XYBase.logStatus(TAG, "Activity Paused: " + this.getLocalClassName());
         super.onPause();
-        hideThrobber();
+        throbber.hide();
         hideKeyboard();
     }
 
@@ -133,7 +111,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     private ProgressDialog _progressBar = null;
 
     protected void showProgressBar() {
-        logExtreme(TAG, "showProgressBar");
+        logInfo(TAG, "showProgressBar");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -145,7 +123,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     }
 
     protected void showProgressBar(final String title, final String message, final boolean cancellable, final int max) {
-        logExtreme(TAG, "showProgressBar");
+        logInfo(TAG, "showProgressBar");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -175,7 +153,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     }
 
     protected void hideProgressBar() {
-        logExtreme(TAG, "hideProgressBar");
+        logInfo(TAG, "hideProgressBar");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -188,7 +166,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     }
 
     protected void setProgressBarMessage(final String message) {
-        logExtreme(TAG, "setProgressBarMessage");
+        logInfo(TAG, "setProgressBarMessage");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -199,47 +177,10 @@ public abstract class XYBaseActivity extends AppCompatActivity {
         });
     }
 
-    private XYThrobberDialog _dialogThrobber = null;
-
-    protected void showThrobber() {
-        logExtreme(TAG, "showThrobber");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_dialogThrobber == null) {
-                    _dialogThrobber = new XYThrobberDialog(XYBaseActivity.this);
-                    if (!isFinishing()) {
-                        _dialogThrobber.show();
-                    }
-                } else {
-                    _dialogThrobber.dismiss();
-                    _dialogThrobber = null;
-                    _dialogThrobber = new XYThrobberDialog(XYBaseActivity.this);
-                    if (!isFinishing()) {
-                        _dialogThrobber.show();
-                    }
-                }
-            }
-        });
-    }
-
-    protected void hideThrobber() {
-        logExtreme(TAG, "hideThrobber");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_dialogThrobber != null) {
-                    _dialogThrobber.dismiss();
-                    _dialogThrobber = null;
-                }
-            }
-        });
-    }
-
     private XYSplashDialog _dialogSplash = null;
 
     protected void showSplash() {
-        logExtreme(TAG, "showSplash");
+        logInfo(TAG, "showSplash");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -254,7 +195,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     }
 
     protected void hideSplash() {
-        logExtreme(TAG, "hideSplash");
+        logInfo(TAG, "hideSplash");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -266,7 +207,18 @@ public abstract class XYBaseActivity extends AppCompatActivity {
         });
     }
 
+    public void showToast(final String message) {
+        logInfo(TAG, "showProgressBar");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(XYBaseActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     public void hideKeyboard() {
+        logInfo(TAG, "hideKeyboard");
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = getCurrentFocus();

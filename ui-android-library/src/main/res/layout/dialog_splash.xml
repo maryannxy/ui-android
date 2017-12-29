@@ -2,7 +2,7 @@
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.xyfindables.ui.XYSplashDialog">
+    tools:context="com.xyfindables.ui.dialogs.XYSplashDialog">
 
     <RelativeLayout
         android:id="@+id/still_splash_layout"
