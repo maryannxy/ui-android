@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.xyfindables.ui.dialogs.XYProgressDialog;
 import com.xyfindables.ui.dialogs.XYSplashDialog;
 import com.xyfindables.ui.dialogs.XYThrobberDialog;
 import com.xyfindables.ui.views.XYToolbar;
@@ -53,6 +54,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
     }
 
     public XYThrobberDialog throbber;
+    public XYProgressDialog progress;
 
     protected static int _activityCount = 0;
 
@@ -108,74 +110,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
         return (_activityCount > 0);
     }
 
-    private ProgressDialog _progressBar = null;
 
-    protected void showProgressBar() {
-        logInfo(TAG, "showProgressBar");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_progressBar != null && !isFinishing()) {
-                    _progressBar.show();
-                }
-            }
-        });
-    }
-
-    protected void showProgressBar(final String title, final String message, final boolean cancellable, final int max) {
-        logInfo(TAG, "showProgressBar");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_progressBar == null) {
-                    _progressBar = new ProgressDialog(XYBaseActivity.this);
-                    _progressBar.setTitle(title);
-                    _progressBar.setMessage(message);
-                    _progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    _progressBar.setCancelable(cancellable);
-                    _progressBar.setMax(max);
-                    if (!isFinishing()) {
-                        _progressBar.show();
-                    }
-                }
-            }
-        });
-    }
-
-    protected void incrementProgressBar(final int increment) {
-        if (_progressBar != null) {
-            _progressBar.incrementProgressBy(increment);
-        }
-    }
-
-    protected ProgressDialog getProgressBar() {
-        return _progressBar;
-    }
-
-    protected void hideProgressBar() {
-        logInfo(TAG, "hideProgressBar");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_progressBar != null && _progressBar.isShowing()) {
-                    _progressBar.dismiss();
-                    _progressBar = null;
-                }
-            }
-        });
-    }
-
-    protected void setProgressBarMessage(final String message) {
-        logInfo(TAG, "setProgressBarMessage");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (_progressBar != null) {
-                    _progressBar.setMessage(message);
-                }
-            }
-        });
-    }
 
     private XYSplashDialog _dialogSplash = null;
 

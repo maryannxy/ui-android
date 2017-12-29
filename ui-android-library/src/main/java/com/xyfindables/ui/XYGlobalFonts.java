@@ -7,10 +7,6 @@ import android.widget.TextView;
 
 import com.xyfindables.core.XYBase;
 
-/**
- * Created by arietrouw on 1/15/17.
- */
-
 public class XYGlobalFonts extends XYBase {
     private static Typeface[] _font;
     private static Typeface[] _awesome;

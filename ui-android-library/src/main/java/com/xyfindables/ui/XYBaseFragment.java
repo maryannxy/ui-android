@@ -1,6 +1,5 @@
 package com.xyfindables.ui;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -68,8 +67,6 @@ public class XYBaseFragment extends Fragment {
         logInfo(TAG, "showToast");
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
-
-    private XYThrobberDialog _dialogThrobber = null;
 
     @Override
     public void onAttach(Context context) {
