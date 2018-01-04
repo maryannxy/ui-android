@@ -63,6 +63,7 @@ public abstract class XYBaseActivity extends AppCompatActivity {
         logStatus(TAG, "Activity Created: " + this.getLocalClassName());
         Fabric.with(this, new Answers(), new Crashlytics());
         throbber = new XYThrobberDialog(this);
+        progress = new XYProgressDialog(this);
         super.onCreate(savedInstanceState);
     }
 

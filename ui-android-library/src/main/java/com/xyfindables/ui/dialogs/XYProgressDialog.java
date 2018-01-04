@@ -17,16 +17,16 @@ public class XYProgressDialog extends ProgressDialog {
     public void show(final String title, final String message, final boolean cancellable, final int max) {
         logInfo(TAG, "show");
         XYBaseActivity.RunOnUIThread(new Runnable() {
-            @Override
-            public void run() {
-                    setTitle(title);
-                    setMessage(message);
-                    setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    setCancelable(cancellable);
-                    setMax(max);
-                    show();
-                }
-            }
+                                         @Override
+                                         public void run() {
+                                             setTitle(title);
+                                             setMessage(message);
+                                             setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                             setCancelable(cancellable);
+                                             setMax(max);
+                                             show();
+                                         }
+                                     }
         );
     }
 
@@ -36,30 +36,60 @@ public class XYProgressDialog extends ProgressDialog {
             @Override
             public void run() {
                 if (isShowing()) {
-                    dismiss();
+                    XYProgressDialog.super.dismiss();
                 }
             }
         });
     }
 
     public void show() {
-        logInfo(TAG, "hide");
+        logInfo(TAG, "show");
         XYBaseActivity.RunOnUIThread(new Runnable() {
             @Override
             public void run() {
                 if (!isShowing()) {
-                    show();
+                    XYProgressDialog.super.show();
                 }
             }
         });
     }
 
-    protected void setMessage(final String message) {
+    public void setMessage(final String message) {
         logInfo(TAG, "setMessage");
         XYBaseActivity.RunOnUIThread(new Runnable() {
             @Override
             public void run() {
-                    setMessage(message);
+                XYProgressDialog.super.setMessage(message);
+            }
+        });
+    }
+
+    public void setMax(final int max) {
+        logInfo(TAG, "setMax");
+        XYBaseActivity.RunOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                XYProgressDialog.super.setMax(max);
+            }
+        });
+    }
+
+    public void setProgress(final int progress) {
+        logInfo(TAG, "setProgress");
+        XYBaseActivity.RunOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                XYProgressDialog.super.setProgress(progress);
+            }
+        });
+    }
+
+    public void incrementProgressBy(final int value) {
+        logInfo(TAG, "incrementProgressBy");
+        XYBaseActivity.RunOnUIThread(new Runnable() {
+            @Override
+            public void run() {
+                XYProgressDialog.super.incrementProgressBy(value);
             }
         });
     }
