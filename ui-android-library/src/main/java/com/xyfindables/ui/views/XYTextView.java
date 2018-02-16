@@ -22,4 +22,10 @@ public class XYTextView extends AppCompatTextView {
 
         XYGlobalFonts.setViewFont(context, this);
     }
+
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        return true;
+    }
 }

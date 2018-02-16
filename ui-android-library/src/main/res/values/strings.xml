@@ -2,4 +2,7 @@
     <string name="app_name">XY Findables UI</string>
     <string name="imgdesc_xy_logo">xy find it logo</string>
     <string name="action_bar_size">22dp</string>
+    <string name="imgdesc_xy_find_it">xy find it</string>
+    <string name="imgdesc_loading_spinner">loading spinner</string>
+    <string name="loading">Loading…</string>
 </resources>

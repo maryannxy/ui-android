@@ -44,4 +44,27 @@
     <color name="xy_ui_palette_accent_75">#cfe2fbf7</color>
     <color name="xy_ui_palette_alert_75">#cfff0000</color>
 
+    <!-- http://paletton.com/palette.php?uid=43e0u0kw0ppmuvXtdv1BrkMJTfv -->
+
+    <color name="xy_border">#e2fbf7</color>
+    <color name="xy_connected_circle">#77ffffff</color>
+
+    <color name="xy_text_light_enabled">#ffffff</color>
+    <color name="xy_text_light">#ffffff</color>
+    <color name="xy_text_dark">#000000</color>
+    <color name="xy_text_light_disabled">#77ffffff</color>
+    <color name="xy_text_shadow">#7f000000</color>
+
+    <color name="xy_background_light">#ffffff</color>
+    <color name="xy_background_dark">#007f6e</color>
+    <color name="xy_background_pressed">#30a090</color>
+    <color name="xy_background_disabled">#e0e3e5</color>
+    <color name="xy_background_alert">#ff0000</color>
+    <color name="xy_background_desktop">#dddddd</color>
+    <!--old disabled color<color name="xy_background_disabled">#B5AD9E</color>-->
+
+    <!--old Android color values removed in 3.0 AndroidStudio update-->
+    <color name="md_deep_orange_500">#ff5722</color>
+    <color name="md_white_1000">#ffffff</color>
+
 </resources>

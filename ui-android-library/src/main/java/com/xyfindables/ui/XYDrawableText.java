@@ -8,10 +8,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
-/**
- * Created by arietrouw on 1/23/17.
- */
-
 public class XYDrawableText extends Drawable {
     private final String _text;
     private final float _size;
