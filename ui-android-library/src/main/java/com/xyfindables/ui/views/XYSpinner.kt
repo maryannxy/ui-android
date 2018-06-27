@@ -18,8 +18,8 @@ import com.xyfindables.ui.R
  */
 
 class XYSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyle: Int = android.support.v7.appcompat.R.attr.spinnerStyle) : AppCompatSpinner(context, attrs, defStyle) {
-    private var _entries = arrayOf<String>()
-    private var _values = arrayOf<String>()
+    private var _entries = arrayOf<String?>()
+    private var _values = arrayOf<String?>()
     private var _hint: String? = null
 
     val value: String?
@@ -82,7 +82,7 @@ class XYSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet?
             }
 
             override fun getItem(position: Int): Any {
-                return _entries[position]
+                return _entries[position]!!
             }
 
             override fun getItemId(position: Int): Long {
@@ -142,11 +142,11 @@ class XYSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), res.displayMetrics).toInt()
     }
 
-    fun setEntries(entries: Array<String>) {
+    fun setEntries(entries: Array<String?>) {
         _entries = entries
     }
 
-    fun setValues(values: Array<String>) {
+    fun setValues(values: Array<String?>) {
         _values = values
     }
 

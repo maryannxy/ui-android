@@ -9,6 +9,7 @@ import com.xyfindables.ui.XYBaseActivity
 import com.xyfindables.ui.views.XYButton
 import com.xyfindables.ui.views.XYToolbar
 import com.crashlytics.android.Crashlytics
+import com.xyfindables.ui.dialogs.XYSplashDialog
 import io.fabric.sdk.android.Fabric
 
 open class XYFindablesUISampleActivity : XYBaseActivity() {
@@ -17,6 +18,8 @@ open class XYFindablesUISampleActivity : XYBaseActivity() {
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_xyfindables_ui_sample)
+        val dialog = XYSplashDialog(this)
+        dialog.show()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

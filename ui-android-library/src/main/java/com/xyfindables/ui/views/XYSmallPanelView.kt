@@ -8,7 +8,7 @@ import android.widget.LinearLayout
  * Created by arietrouw on 1/15/17.
  */
 
-class XYSmallPanelView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : LinearLayout(context, attrs, defStyle) {
+open class XYSmallPanelView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : LinearLayout(context, attrs, defStyle) {
 
     init {
         instanceCount++

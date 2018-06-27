@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -22,6 +23,7 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 import io.fabric.sdk.android.Fabric
+import java.net.URL
 
 abstract class XYBaseActivity : AppCompatActivity() {
 
@@ -30,6 +32,45 @@ abstract class XYBaseActivity : AppCompatActivity() {
     var throbber: XYThrobberDialog? = null
     var progress: XYProgressDialog? = null
 
+    fun logInfo(message: String) {
+        XYBase.logInfo(TAG, message)
+    }
+
+    fun logExtreme(message: String) {
+        XYBase.logExtreme(TAG, message)
+    }
+
+    fun logError(message: String, debug: Boolean) {
+        XYBase.logError(TAG, message, debug)
+    }
+
+    fun logException(exception: Exception, debug: Boolean) {
+        XYBase.logException(TAG, exception, debug)
+    }
+
+    fun logException(tag: String, exception: Exception, debug: Boolean) {
+        XYBase.logException(tag, exception, debug)
+    }
+
+    fun logStatus(tag: String, message: String, debug: Boolean) {
+        XYBase.logError(tag, message, debug)
+    }
+
+    fun logInfo(tag: String, message: String) {
+        XYBase.logInfo(tag, message)
+    }
+
+    fun logExtreme(tag: String, message: String) {
+        XYBase.logExtreme(tag, message)
+    }
+
+    fun logError(tag: String, message: String, debug: Boolean) {
+        XYBase.logError(tag, message, debug)
+    }
+
+    fun logStatus(message: String, debug: Boolean) {
+        XYBase.logError(TAG, message, debug)
+    }
 
     private var _dialogSplash: XYSplashDialog? = null
     fun toolbar(): XYToolbar? {
@@ -40,15 +81,19 @@ abstract class XYBaseActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         XYBase.logStatus(TAG, "Activity Created: " + this.localClassName)
         Fabric.with(this, Answers(), Crashlytics())
         throbber = XYThrobberDialog(this)
         progress = XYProgressDialog(this)
-        super.onCreate(savedInstanceState)
     }
 
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onCreate(savedInstanceState, persistentState)
+        XYBase.logStatus(TAG, "Activity Created: " + this.localClassName)
+        Fabric.with(this, Answers(), Crashlytics())
+        throbber = XYThrobberDialog(this)
+        progress = XYProgressDialog(this)
     }
 
     override fun onResume() {
@@ -81,26 +126,127 @@ abstract class XYBaseActivity : AppCompatActivity() {
         hideKeyboard()
     }
 
-    protected fun showSplash() {
-        XYBase.logInfo(TAG, "showSplash")
-        runOnUiThread {
-            if (_dialogSplash == null) {
-                _dialogSplash = XYSplashDialog(this@XYBaseActivity)
-                if (!isFinishing) {
-                    _dialogSplash!!.show()
-                }
-            }
+    fun getRemoteFile(location : String, useCache : Boolean = true) : ByteArray {
+        val url : URL
+        if (useCache) {
+            url = URL(location);
+        } else {
+            url = URL(location + "?t=" + Math.random());
         }
+        val inputStream = url.openStream()
+
+        val result = inputStream.readBytes()
+
+        inputStream.close()
+
+        return result
     }
 
-    protected fun hideSplash() {
-        XYBase.logInfo(TAG, "hideSplash")
-        runOnUiThread {
-            if (_dialogSplash != null) {
-                _dialogSplash!!.dismiss()
-                _dialogSplash = null
+    fun getXorValue(array: ByteArray): Byte {
+        var cooked = 0
+        for (i in array.indices) {
+            cooked = (cooked xor array[i].toInt())
+        }
+        return cooked.toByte()
+    }
+
+    fun byteArrayToThreeByteArray(array: ByteArray): Array<Array<ByteArray>> {
+        val xor = getXorValue(array)
+        val xorArray = byteArrayOf(xor)
+
+        val newArray = ByteArray(array.size + 1)
+        System.arraycopy(array, 0, newArray, 0, array.size)
+        System.arraycopy(xorArray, 0, newArray, array.size, 1)
+
+        val len = newArray.size
+        val patchLen = 128
+        val blocks = Math.ceil(len.toDouble() / patchLen.toDouble()).toInt()
+
+        // need to send all chunks of 20, then chunk of modulus remainder
+        val firmwareByteArray = emptyArray<Array<ByteArray>>()
+        var offset = 0
+
+        for (i in 0 until blocks) {
+            var blockSize = patchLen
+            if (i + 1 == blocks) {
+                blockSize = len % blockSize
+            }
+            val chunkSize = 20
+            var chunkCounter = 0
+            firmwareByteArray[i] = emptyArray<ByteArray>()
+            var j = 0
+            while (j < blockSize) {
+                var tempChunkSize = chunkSize
+                if (offset + chunkSize > len) {
+                    tempChunkSize = len - offset
+                } else if (j + chunkSize > blockSize) {
+                    tempChunkSize = blockSize % chunkSize
+                }
+                val chunk = newArray.copyOfRange(offset, offset + tempChunkSize)
+                firmwareByteArray[i][chunkCounter] = chunk
+                offset += tempChunkSize
+                chunkCounter++
+                j += 20
             }
         }
+        return firmwareByteArray
+    }
+
+    fun hexStringToThreeByteArray(string: String): Array<Array<ByteArray>> {
+        val result = string.toByteArray()
+        val resultLength = result.size
+        run {
+            var i = 0
+            while (i < resultLength) {
+                result[i shr 1] = ((if (result[i] < 0x3a) result[i] - 0x30 else result[i] - 0x37) * 16 + if (result[i + 1] < 0x3a) result[i + 1] - 0x30 else result[i + 1] - 0x37).toByte()
+                i += 2
+            }
+        }
+
+        logExtreme(TAG, "testOta-length of result: " + result.size / 2)
+
+        val xor = getXorValue(result)
+        val xorArray = byteArrayOf(xor)
+
+        val newResult = ByteArray(result.size + 1)
+        System.arraycopy(result, 0, newResult, 0, result.size)
+        System.arraycopy(xorArray, 0, newResult, result.size, 1)
+
+        val newResultLength = newResult.size
+        // total number of blocks that will be written
+        // each block will contain 240 bytes maximum
+        val patchLen = 128
+        val blocks = Math.ceil(newResultLength.toDouble() / patchLen.toDouble()).toInt()
+
+        // need to send all chunks of 20, then chunk of modulus remainder
+        val firmwareByteArray = emptyArray<Array<ByteArray>>()
+        var offset = 0
+
+        for (i in 0 until blocks) {
+            var blockSize = patchLen
+            if (i + 1 == blocks) {
+                blockSize = newResultLength % blockSize
+            }
+            val chunkSize = 20
+            var chunkCounter = 0
+            firmwareByteArray[i] = emptyArray<ByteArray>()
+            var j = 0
+            while (j < blockSize) {
+                var tempChunkSize = chunkSize
+                if (offset + chunkSize > newResultLength) {
+                    tempChunkSize = newResultLength - offset
+                } else if (j + chunkSize > blockSize) {
+                    tempChunkSize = blockSize % chunkSize
+                }
+                val chunk = result.copyOfRange(offset, offset + tempChunkSize)
+                val fwByteArray = firmwareByteArray[i]
+                fwByteArray[chunkCounter] = chunk
+                offset += tempChunkSize
+                chunkCounter++
+                j += 20
+            }
+        }
+        return firmwareByteArray
     }
 
     fun showToast(message: String) {
@@ -124,22 +270,7 @@ abstract class XYBaseActivity : AppCompatActivity() {
 
         private val TAG = XYBaseActivity::class.java.simpleName
 
-        fun RunOnUIThread(action: Runnable) {
-            if (Looper.myLooper() == Looper.getMainLooper()) {
-                action.run()
-            } else {
-                val handler = Handler(Looper.getMainLooper())
-                handler.post(action)
-            }
-        }
-
-        protected val _threadPool: ThreadPoolExecutor
-
-        init {
-            _threadPool = ThreadPoolExecutor(3, 30, 30, TimeUnit.SECONDS, LinkedBlockingQueue())
-        }
-
-        protected var _activityCount = 0
+        var _activityCount = 0
 
         val isForeground: Boolean
             get() = _activityCount > 0

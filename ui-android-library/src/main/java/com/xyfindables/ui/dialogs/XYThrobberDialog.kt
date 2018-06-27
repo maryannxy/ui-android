@@ -31,22 +31,6 @@ class XYThrobberDialog(private val _activity: Activity) : Dialog(_activity) {
         }
     }
 
-    override fun show() {
-        XYBase.logInfo(TAG, "showThrobber")
-        XYBaseActivity.RunOnUIThread (Runnable {
-            if (_activity.isFinishing) {
-                super@XYThrobberDialog.dismiss()
-            } else {
-                super@XYThrobberDialog.show()
-            }
-        })
-    }
-
-    override fun hide() {
-        XYBase.logInfo(TAG, "showThrobber")
-        XYBaseActivity.RunOnUIThread (Runnable{ super@XYThrobberDialog.dismiss() })
-    }
-
     companion object {
 
         private val TAG = XYThrobberDialog::class.java.simpleName

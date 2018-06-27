@@ -14,14 +14,15 @@ import com.xyfindables.ui.R
 
 class XYSplashDialog(context: Context) : Dialog(context, R.style.xy_full_screen_dialog) {
     init {
-        setContentView(R.layout.dialog_splash)
-        startAnimation()
+
     }
 
-    public override fun onCreate(savedInstance: Bundle) {
+    public override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
-        window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT)
+        setContentView(R.layout.dialog_splash)
+        startAnimation()
+        /*window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT)*/
     }
 
     private fun animate(v: View, animResource: Int) {
