@@ -13,16 +13,15 @@ import android.widget.RelativeLayout
 import com.xyfindables.ui.R
 
 class XYSplashDialog(context: Context) : Dialog(context, R.style.xy_full_screen_dialog) {
-    init {
-
-    }
 
     public override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
         setContentView(R.layout.dialog_splash)
+    }
+
+    override fun onStart() {
+        super.onStart()
         startAnimation()
-        /*window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT)*/
     }
 
     private fun animate(v: View, animResource: Int) {

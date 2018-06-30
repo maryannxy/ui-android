@@ -91,7 +91,7 @@ open class XYBaseFragment : Fragment() {
     override fun onPause() {
         XYBase.logInfo(TAG, "onPause")
         super.onPause()
-        throbber?.hide()
+        throbber?.dismiss()
     }
 
     protected fun showToast(message: String) {

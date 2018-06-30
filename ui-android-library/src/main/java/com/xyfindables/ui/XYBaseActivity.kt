@@ -2,25 +2,18 @@ package com.xyfindables.ui
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import android.widget.Toast
 
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
-import com.xyfindables.ui.dialogs.XYProgressDialog
-import com.xyfindables.ui.dialogs.XYSplashDialog
 import com.xyfindables.ui.dialogs.XYThrobberDialog
 import com.xyfindables.ui.views.XYToolbar
 import com.xyfindables.core.XYBase
-
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 import io.fabric.sdk.android.Fabric
 import java.net.URL
@@ -30,22 +23,27 @@ abstract class XYBaseActivity : AppCompatActivity() {
     var _toolbar: XYToolbar? = null
 
     var throbber: XYThrobberDialog? = null
-    var progress: XYProgressDialog? = null
+
+    val tag : String
+        get (){
+            val parts = this.localClassName.split('.')
+            return parts[parts.lastIndex]
+        }
 
     fun logInfo(message: String) {
-        XYBase.logInfo(TAG, message)
+        XYBase.logInfo(tag, message)
     }
 
     fun logExtreme(message: String) {
-        XYBase.logExtreme(TAG, message)
+        XYBase.logExtreme(tag, message)
     }
 
     fun logError(message: String, debug: Boolean) {
-        XYBase.logError(TAG, message, debug)
+        XYBase.logError(tag, message, debug)
     }
 
     fun logException(exception: Exception, debug: Boolean) {
-        XYBase.logException(TAG, exception, debug)
+        XYBase.logException(tag, exception, debug)
     }
 
     fun logException(tag: String, exception: Exception, debug: Boolean) {
@@ -69,10 +67,9 @@ abstract class XYBaseActivity : AppCompatActivity() {
     }
 
     fun logStatus(message: String, debug: Boolean) {
-        XYBase.logError(TAG, message, debug)
+        XYBase.logError(tag, message, debug)
     }
 
-    private var _dialogSplash: XYSplashDialog? = null
     fun toolbar(): XYToolbar? {
         if (_toolbar == null) {
             _toolbar = findViewById(R.id.toolbar)
@@ -82,48 +79,48 @@ abstract class XYBaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        XYBase.logStatus(TAG, "Activity Created: " + this.localClassName)
+        XYBase.logStatus(tag, "Activity Created: $tag")
         Fabric.with(this, Answers(), Crashlytics())
         throbber = XYThrobberDialog(this)
-        progress = XYProgressDialog(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        XYBase.logStatus(TAG, "Activity Created: " + this.localClassName)
+        XYBase.logStatus(tag, "Activity Created: $tag")
         Fabric.with(this, Answers(), Crashlytics())
         throbber = XYThrobberDialog(this)
-        progress = XYProgressDialog(this)
     }
 
     override fun onResume() {
-        XYBase.logStatus(TAG, "Activity Resumed: " + this.localClassName)
+        XYBase.logStatus(tag, "Activity Resumed: $tag")
         super.onResume()
         _activityCount++
-        XYBase.logInfo(TAG, "onResume:" + _activityCount + ":" + this.localClassName)
+        XYBase.logInfo(tag, "onResume:" + _activityCount + ":$tag")
     }
 
     public override fun onStart() {
-        XYBase.logStatus(TAG, "Activity Started: " + this.localClassName)
+        XYBase.logStatus(tag, "Activity Started: $tag")
         super.onStart()
     }
 
     public override fun onStop() {
-        XYBase.logStatus(TAG, "Activity Stopped: " + this.localClassName)
+        XYBase.logStatus(tag, "Activity Stopped: $tag")
+        throbber?.dismiss()
         super.onStop()
         _activityCount--
     }
 
     override fun onDestroy() {
-        XYBase.logStatus(TAG, "Activity Destroyed: " + this.localClassName)
+        XYBase.logStatus(tag, "Activity Destroyed: $tag")
+        throbber?.dismiss()
         super.onDestroy()
     }
 
     override fun onPause() {
-        XYBase.logStatus(TAG, "Activity Paused: " + this.localClassName)
-        super.onPause()
-        throbber?.hide()
+        XYBase.logStatus(tag, "Activity Paused: $tag")
+        throbber?.dismiss()
         hideKeyboard()
+        super.onPause()
     }
 
     fun getRemoteFile(location : String, useCache : Boolean = true) : ByteArray {
@@ -250,12 +247,12 @@ abstract class XYBaseActivity : AppCompatActivity() {
     }
 
     fun showToast(message: String) {
-        XYBase.logInfo(TAG, "showProgressBar")
+        XYBase.logInfo(tag, "showProgressBar")
         runOnUiThread { Toast.makeText(this@XYBaseActivity, message, Toast.LENGTH_LONG).show() }
     }
 
     fun hideKeyboard() {
-        XYBase.logInfo(TAG, "hideKeyboard")
+        XYBase.logInfo(tag, "hideKeyboard")
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         //Find the currently focused view, so we can grab the correct window token from it.
         var view = currentFocus

@@ -61,7 +61,7 @@ class XYSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         }
 
         adapter = object : SpinnerAdapter {
-            override fun getDropDownView(position: Int, convertView: View, parent: ViewGroup): View {
+            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 val textView = XYTextView(context)
                 val padding = dpToPx(context.resources, 16)
                 textView.setPadding(padding, padding, padding, padding)
@@ -93,7 +93,7 @@ class XYSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet?
                 return false
             }
 
-            override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 val editText = XYEditText(context)
                 editText.setText(_entries[position])
                 editText.isReadOnly = true

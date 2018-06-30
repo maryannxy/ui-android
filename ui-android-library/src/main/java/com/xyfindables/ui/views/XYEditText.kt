@@ -96,7 +96,7 @@ class XYEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
         }
     }
 
-    override fun setError(error: CharSequence, icon: Drawable) {
+    override fun setError(error: CharSequence?, icon: Drawable?) {
         setCompoundDrawables(null, null, icon, null)
     }
 
