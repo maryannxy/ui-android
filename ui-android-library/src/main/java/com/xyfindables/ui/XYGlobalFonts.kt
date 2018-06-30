@@ -16,7 +16,7 @@ class XYGlobalFonts : XYBase() {
         fun getFontAwesome(context: Context, style: Int = Typeface.NORMAL): Typeface {
             synchronized(XYGlobalFonts::class.java) {
                 if (_awesome == null) {
-                    _awesome = Array<Typeface>(4, {i -> Typeface.DEFAULT})
+                    _awesome = Array<Typeface>(4, {_ -> Typeface.DEFAULT})
                     var awesome = _awesome!!
                     try {
                         awesome[Typeface.NORMAL] = Typeface.createFromAsset(context.assets, "fonts/FontAwesome.otf")
@@ -36,7 +36,7 @@ class XYGlobalFonts : XYBase() {
         fun getFont(context: Context, style: Int = Typeface.NORMAL): Typeface {
             synchronized(XYGlobalFonts::class.java) {
                 if (_font == null) {
-                    _font = Array<Typeface>(4, {i -> Typeface.DEFAULT})
+                    _font = Array<Typeface>(4, {_ -> Typeface.DEFAULT})
                     var font = _font!!
                     try {
                         font[Typeface.NORMAL] = Typeface.createFromAsset(context.assets, "fonts/Quicksand.otf")
@@ -63,14 +63,10 @@ class XYGlobalFonts : XYBase() {
 
         fun setPreferenceFont(context: Context, view: View) {
             val titleView = view.findViewById<View>(android.R.id.title) as TextView
-            if (titleView != null) {
-                XYGlobalFonts.setViewFont(context, titleView)
-            }
+            XYGlobalFonts.setViewFont(context, titleView)
 
             val summaryView = view.findViewById<View>(android.R.id.summary) as TextView
-            if (summaryView != null) {
-                XYGlobalFonts.setViewFont(context, summaryView)
-            }
+            XYGlobalFonts.setViewFont(context, summaryView)
         }
 
         fun setViewFontAwesome(context: Context, view: TextView) {

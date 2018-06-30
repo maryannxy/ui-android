@@ -71,7 +71,6 @@ class XYPolygon : View {
             opt = BitmapFactory.Options()
             opt.inTempStorage = ByteArray(16 * 1024)
             opt.inSampleSize = 4
-            opt.inPurgeable = true
 
             val fillBitmap = BitmapFactory.decodeResource(resources, fillBitmapResourceId, opt)
             val fillShader = BitmapShader(fillBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)

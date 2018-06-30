@@ -1,7 +1,6 @@
 package com.xyfindables.ui
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
@@ -57,7 +56,6 @@ open class XYBaseFragment : Fragment() {
         XYBase.logError(XYBaseFragment.TAG, message, debug)
     }
 
-    private val _progressDialog: ProgressDialog? = null
     var throbber: XYThrobberDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

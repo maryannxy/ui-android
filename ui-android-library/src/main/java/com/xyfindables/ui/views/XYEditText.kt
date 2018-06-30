@@ -35,8 +35,7 @@ class XYEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
     private val _showImeRunnable = Runnable {
         val imm = getContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        imm?.showSoftInput(this@XYEditText, 0)
+        imm.showSoftInput(this@XYEditText, 0)
     }
 
     init {
@@ -107,7 +106,7 @@ class XYEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet
             removeCallbacks(_showImeRunnable)
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-            imm?.hideSoftInputFromWindow(this.windowToken, 0)
+            imm.hideSoftInputFromWindow(this.windowToken, 0)
         }
     }
 
