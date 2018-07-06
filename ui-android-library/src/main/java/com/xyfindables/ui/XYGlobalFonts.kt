@@ -80,7 +80,7 @@ class XYGlobalFonts : XYBase() {
 
         @JvmOverloads
         fun getFontAwesomeDrawable(context: Context, text: Int, color: Int, size: Float, style: Int = Typeface.NORMAL): XYDrawableText {
-            return XYDrawableText(context.resources.getString(text), context.resources.getColor(color), size, getFontAwesome(context, style))
+            return XYDrawableText(context.resources.getString(text), @Suppress("DEPRECATION")context.resources.getColor(color), size, getFontAwesome(context, style))
         }
     }
 }

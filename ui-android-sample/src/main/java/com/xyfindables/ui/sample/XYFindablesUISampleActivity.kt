@@ -18,8 +18,6 @@ open class XYFindablesUISampleActivity : XYBaseActivity() {
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_xyfindables_ui_sample)
-        val dialog = XYSplashDialog(this)
-        dialog.show()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

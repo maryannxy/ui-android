@@ -46,19 +46,19 @@ class XYToolbar : android.support.v7.widget.Toolbar {
 
     fun enableMenuNavigation(onClickListener: View.OnClickListener) {
         isBackNavigationEnabled = false
-        navigationIcon = resources.getDrawable(R.drawable.xy_ui_toolbar_menu)
+        navigationIcon = @Suppress("DEPRECATION")resources.getDrawable(R.drawable.xy_ui_toolbar_menu)
         setNavigationOnClickListener(onClickListener)
     }
 
     fun enableBackNavigation(activity: Activity) {
         isBackNavigationEnabled = true
-        navigationIcon = resources.getDrawable(R.drawable.xy_ui_toolbar_back)
+        navigationIcon = @Suppress("DEPRECATION")resources.getDrawable(R.drawable.xy_ui_toolbar_back)
         setNavigationOnClickListener { activity.onBackPressed() }
     }
 
     fun enableBackNavigation(onClickListener: View.OnClickListener) {
         isBackNavigationEnabled = true
-        navigationIcon = resources.getDrawable(R.drawable.xy_ui_toolbar_back)
+        navigationIcon = @Suppress("DEPRECATION")resources.getDrawable(R.drawable.xy_ui_toolbar_back)
         setNavigationOnClickListener(onClickListener)
     }
 

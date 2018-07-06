@@ -11,6 +11,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import android.view.animation.AlphaAnimation
 
 import com.xyfindables.ui.R
 
@@ -33,7 +34,7 @@ class XYSignalBars @JvmOverloads constructor(context: Context, attrs: AttributeS
         if (attrs != null) {
             val value = attrs.getAttributeResourceValue("http://schemas.android.com/apk/res/android", "color", 0)
             if (value != 0) {
-                color = resources.getColor(value)
+                color = @Suppress("DEPRECATION")resources.getColor(value)
             } else {
                 color = attrs.getAttributeIntValue("http://schemas.android.com/apk/res/android", "color", Color.WHITE)
             }
@@ -100,10 +101,17 @@ class XYSignalBars @JvmOverloads constructor(context: Context, attrs: AttributeS
         }
     }
 
-    fun setBarCount(barCount: Int) {
-        if (barCount != _barCount) {
-            _barCount = barCount
-            invalidate()
+    fun setBarCount(barCount: Int, animate:Boolean) {
+        post{
+            if (barCount != _barCount) {
+                _barCount = barCount
+                invalidate()
+            }
+            if (animate) {
+                val animation = AlphaAnimation(0.0f, 1.0f)
+                animation.setDuration(500)
+                this.startAnimation(animation)
+            }
         }
     }
 
