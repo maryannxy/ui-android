@@ -2,9 +2,11 @@ package com.xyfindables.ui
 
 import android.os.Handler
 import android.os.Looper
+import kotlinx.coroutines.experimental.*
 import kotlin.coroutines.experimental.AbstractCoroutineContextElement
 import kotlin.coroutines.experimental.Continuation
 import kotlin.coroutines.experimental.ContinuationInterceptor
+import kotlin.coroutines.experimental.CoroutineContext
 
 private class AndroidContinuation<T>(val cont: Continuation<T>) : Continuation<T> by cont {
     override fun resume(value: T) {
@@ -21,4 +23,13 @@ private class AndroidContinuation<T>(val cont: Continuation<T>) : Continuation<T
 object UIThread : AbstractCoroutineContextElement(ContinuationInterceptor), ContinuationInterceptor {
     override fun <T> interceptContinuation(continuation: Continuation<T>): Continuation<T> =
             AndroidContinuation(continuation)
+}
+
+fun <T> ui(
+        context: CoroutineContext = UIThread,
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        parent: Job? = null,
+        block: suspend CoroutineScope.() -> T
+): Deferred<T> {
+    return async(context, start, parent, block)
 }

@@ -123,7 +123,7 @@ abstract class XYBaseActivity : AppCompatActivity() {
         super.onPause()
     }
 
-    fun getRemoteFile(location : String, useCache : Boolean = true) : ByteArray {
+    fun getRemoteFile(location : String, useCache : Boolean = true) : ByteArray? {
         val url : URL
         if (useCache) {
             url = URL(location);
@@ -248,7 +248,7 @@ abstract class XYBaseActivity : AppCompatActivity() {
 
     fun showToast(message: String) {
         XYBase.logInfo(tag, "showProgressBar")
-        runOnUiThread { Toast.makeText(this@XYBaseActivity, message, Toast.LENGTH_LONG).show() }
+        ui { Toast.makeText(this@XYBaseActivity, message, Toast.LENGTH_LONG).show() }
     }
 
     fun hideKeyboard() {
