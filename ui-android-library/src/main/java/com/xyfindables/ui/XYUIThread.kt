@@ -25,11 +25,11 @@ object UIThread : AbstractCoroutineContextElement(ContinuationInterceptor), Cont
             AndroidContinuation(continuation)
 }
 
-fun <T> ui(
+fun ui(
         context: CoroutineContext = UIThread,
         start: CoroutineStart = CoroutineStart.DEFAULT,
         parent: Job? = null,
-        block: suspend CoroutineScope.() -> T
-): Deferred<T> {
-    return async(context, start, parent, block)
+        block: suspend CoroutineScope.() -> Unit
+): Job {
+    return launch(context, start, parent, block)
 }
