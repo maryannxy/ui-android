@@ -6,21 +6,17 @@ import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ProgressBar
 import android.widget.Toast
 
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.answers.Answers
 import com.xyfindables.ui.dialogs.XYThrobberDialog
 import com.xyfindables.ui.views.XYToolbar
 import com.xyfindables.core.XYBase
 
-import io.fabric.sdk.android.Fabric
 import java.net.URL
 
 abstract class XYBaseActivity : AppCompatActivity() {
 
-    var _toolbar: XYToolbar? = null
+    var toolbar: XYToolbar? = null
 
     var throbber: XYThrobberDialog? = null
 
@@ -70,24 +66,16 @@ abstract class XYBaseActivity : AppCompatActivity() {
         XYBase.logError(tag, message, debug)
     }
 
-    fun toolbar(): XYToolbar? {
-        if (_toolbar == null) {
-            _toolbar = findViewById(R.id.toolbar)
-        }
-        return _toolbar
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         XYBase.logStatus(tag, "Activity Created: $tag")
-        Fabric.with(this, Answers(), Crashlytics())
         throbber = XYThrobberDialog(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
+        toolbar = findViewById(R.id.toolbar)
         XYBase.logStatus(tag, "Activity Created: $tag")
-        Fabric.with(this, Answers(), Crashlytics())
         throbber = XYThrobberDialog(this)
     }
 
