@@ -1,27 +1,18 @@
 package com.xyfindables.ui.views
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.support.v7.widget.LinearLayoutManager
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import com.xyfindables.core.XYBase
-import com.xyfindables.core.guard
-import com.xyfindables.ui.dialogs.XYThrobberDialog
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.async
-import java.util.*
 import android.support.v7.widget.RecyclerView
 import com.xyfindables.ui.ui
 
 import me.everything.android.ui.overscroll.IOverScrollState
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper
 
-open class XYSmallRibbon(context: Context, attrs: AttributeSet?, defStyle: Int) : RecyclerView(context, attrs, defStyle) {
+open class XYSmallRibbon(context: Context, attrs: AttributeSet?, defStyle: Int) : XYRibbon(context, attrs, defStyle) {
 
     private var _reloadTriggered = false
     private var _pendingAnimation = false
@@ -53,7 +44,7 @@ open class XYSmallRibbon(context: Context, attrs: AttributeSet?, defStyle: Int) 
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics).toInt()
     }
 
-    fun initRecyclerView() {
+    open fun initRecyclerView() {
         XYBase.logInfo(TAG, "initRecyclerView")
 
         this.itemAnimator = null
