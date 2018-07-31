@@ -74,9 +74,18 @@ abstract class XYBaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
-        toolbar = findViewById(R.id.toolbar)
         XYBase.logStatus(tag, "Activity Created: $tag")
         throbber = XYThrobberDialog(this)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
+        super.onPostCreate(savedInstanceState, persistentState)
+        toolbar = findViewById(R.id.toolbar)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        toolbar = findViewById(R.id.toolbar)
     }
 
     override fun onResume() {
