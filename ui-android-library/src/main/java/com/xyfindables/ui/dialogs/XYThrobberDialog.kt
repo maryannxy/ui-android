@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View
 
 import com.xyfindables.ui.R
+import com.xyfindables.ui.ui
 
 class XYThrobberDialog(context: Context) : Dialog(context) {
 
@@ -26,6 +27,18 @@ class XYThrobberDialog(context: Context) : Dialog(context) {
             if (divider != null) {
                 divider.visibility = View.GONE
             }
+        }
+    }
+
+    override fun show() {
+        ui {
+            super.show()
+        }
+    }
+
+    override fun hide() {
+        ui {
+            super.hide()
         }
     }
 

@@ -19,11 +19,15 @@ open class XYSmallRibbon(context: Context, attrs: AttributeSet?, defStyle: Int) 
 
     private var _bounceTrigger = 50
 
-    constructor(context: Context) : this(context, null, 0) {
+    open class Listener : XYPanel.Listener () {
+        open fun pull() {
+
+        }
     }
 
-    constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0) {
-    }
+    constructor(context: Context) : this(context, null, 0)
+
+    constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0)
 
     init {
         XYBase.logInfo(TAG, "init")
@@ -65,6 +69,9 @@ open class XYSmallRibbon(context: Context, attrs: AttributeSet?, defStyle: Int) 
                     XYBase.logInfo(TAG, "onOverScrollStateChange: STATE_IDLE")
                     if (_reloadTriggered) {
                         XYBase.logInfo(TAG, "onOverScrollStateChange: _reloadTriggered")
+
+                        (listener as Listener)?.pull()
+
                         _reloadTriggered = false
                         _pendingAnimation = true
                     }

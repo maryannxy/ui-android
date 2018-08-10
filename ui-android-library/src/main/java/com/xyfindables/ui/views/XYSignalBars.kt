@@ -2,7 +2,6 @@ package com.xyfindables.ui.views
 
 import android.content.Context
 import android.content.res.Resources
-import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -15,6 +14,7 @@ import android.view.animation.AlphaAnimation
 import com.xyfindables.core.XYBase
 
 import com.xyfindables.ui.R
+import com.xyfindables.ui.ui
 
 class XYSignalBars @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : View(context, attrs, defStyle) {
 
@@ -104,14 +104,16 @@ class XYSignalBars @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     fun setBarCount(updatedBarCount: Int, animate:Boolean) {
         XYBase.logInfo("arie", "setBarCount: $updatedBarCount")
-        if (barCount != updatedBarCount) {
-            barCount = updatedBarCount
-            invalidate()
-        }
-        if (animate) {
-            val animation = AlphaAnimation(0.0f, 1.0f)
-            animation.setDuration(500)
-            this.startAnimation(animation)
+        ui {
+            if (barCount != updatedBarCount) {
+                barCount = updatedBarCount
+                invalidate()
+            }
+            if (animate) {
+                val animation = AlphaAnimation(0.0f, 1.0f)
+                animation.setDuration(500)
+                this@XYSignalBars.startAnimation(animation)
+            }
         }
     }
 
